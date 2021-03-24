@@ -14,7 +14,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
     /// Due to file path limits in Windows its suggest to prepend only the version number to an asset.
     /// However some packages are updated but the version stays the same, so in some case we must add versionID.
     /// </remarks>
-    public static class OrganizerArchiver
+    public static class Archiver
     {
         private static StringBuilderDebugLog          debugLogOutput      = new StringBuilderDebugLog();
 

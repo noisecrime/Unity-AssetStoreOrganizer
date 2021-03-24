@@ -159,7 +159,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         /// <summary>Archives the source location packages based on curent sorting and filtering results</summary>
         public void StartArchiveSourceLibraryProcess()
         {
-            OrganizerArchiver.ArchiveAssetStorePackages( sortedLibrary, archiveLibrary, sourceLocation, !disableFileOperations );
+            Archiver.ArchiveAssetStorePackages( sortedLibrary, archiveLibrary, sourceLocation, !disableFileOperations );
             requiresBrowserUpdate = true;
         }
 
@@ -246,7 +246,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
                 GUILayout.FlexibleSpace();              
 
                 if ( GUILayout.Button( "Archive Options", EditorGUIStyles.labelNormRight, GUILayout.MinWidth( 256f ), GUILayout.MaxWidth( 256f ) ) )
-                    PopupWindow.Show( optionsButtonRect, new OrganizerOptionsPopup( this ) );
+                    PopupWindow.Show( optionsButtonRect, new ArchiverOptionsPopup( this ) );
 
                 if ( Event.current.type == EventType.Repaint ) optionsButtonRect = GUILayoutUtility.GetLastRect();        
             }
@@ -367,6 +367,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
             GUILayout.Space( 12f );
         }
 
+        [Obsolete("No longer used, instead this is done through popup menu")]
         private void GuiCustomLabel( string labelText, string url, string id, GUIStyle style, float width )
         {
             if ( GUILayout.Button( labelText, style, GUILayout.Height( lineHeight ), GUILayout.MinWidth( width ), GUILayout.MaxWidth( width ) ) && id != "NA" )
@@ -517,7 +518,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
             if ( EditorUtility.DisplayDialog( "Archive Selected Package", message,  "OK", "Cancel" ) )
             {
-                OrganizerArchiver.ArchiveAssetStorePackages( new List<AssetPackage>() { package }, archiveLibrary, sourceLocation, !disableFileOperations );              
+                Archiver.ArchiveAssetStorePackages( new List<AssetPackage>() { package }, archiveLibrary, sourceLocation, !disableFileOperations );              
                 requiresBrowserUpdate = true;
             }
         }
@@ -525,12 +526,12 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         void OnMenuRestorePackage( object sp ) 
         {
             AssetPackage package    = ( AssetPackage )sp;
-            requiresBrowserUpdate   = OrganizerArchiver.RestoreArchivePackageToAssetStore( package, sourceLocation, !disableFileOperations );
+            requiresBrowserUpdate   = Archiver.RestoreArchivePackageToAssetStore( package, sourceLocation, !disableFileOperations );
         }
                         
         void OnMenuShowInExplorer( object sp )      { OrganizerMethods.OpenPackageInExplorer( ( ( AssetPackage )sp ).fullFilePath ); }
         void OnMenuLogPackageInfo( object sp )      { Debug.Log( ( ( AssetPackage )sp ).ToString() ); }
-        void OnMenuLogArchiveStatus( object sp )    { OrganizerArchiver.LogPackageArchiveStatus( ( AssetPackage )sp, archiveLibrary ); }
+        void OnMenuLogArchiveStatus( object sp )    { Archiver.LogPackageArchiveStatus( ( AssetPackage )sp, archiveLibrary ); }
 
         void OnMenuAssetPage( object sp )           { Application.OpenURL( urlAssetTitleQuery + ( ( AssetPackage )sp ).link.id ); }
         void OnMenuPublisherPage( object sp )       { Application.OpenURL( urlPublisherQuery + ( ( AssetPackage )sp ).publisher.label ); } //.id); }

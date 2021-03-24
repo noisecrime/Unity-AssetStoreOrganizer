@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 {    
-    public class OrganizerOptionsPopup : PopupWindowContent
+    public class ArchiverOptionsPopup : PopupWindowContent
     {
         private OrganizerEditor packageLibraryEditor;
 
@@ -11,7 +11,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         private GUIContent fileOpsContent   = new GUIContent("Disable File Operations", "Prevents file operations ( for debugging )" );
         private GUIContent logPathsContent  = new GUIContent("Log Store Paths",         "Logs paths to console for debugging" );
        
-        public OrganizerOptionsPopup( OrganizerEditor editor )
+        public ArchiverOptionsPopup( OrganizerEditor editor )
         {
             packageLibraryEditor = editor;
         }

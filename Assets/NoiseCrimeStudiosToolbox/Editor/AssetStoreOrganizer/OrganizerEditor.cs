@@ -533,7 +533,11 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         void OnMenuLogPackageInfo( object sp )      { Debug.Log( ( ( AssetPackage )sp ).ToString() ); }
         void OnMenuLogArchiveStatus( object sp )    { Archiver.LogPackageArchiveStatus( ( AssetPackage )sp, archiveLibrary ); }
 
-        void OnMenuAssetPage( object sp )           { Application.OpenURL( urlAssetTitleQuery + ( ( AssetPackage )sp ).link.id ); }
+        void OnMenuAssetPage( object sp )
+        {
+            AssetPackage ap =  ( AssetPackage )sp;
+            Application.OpenURL( string.Format( urlAssetTitleQuery, ap.category.label, ap.title, ap.link.id ) );
+        }
         void OnMenuPublisherPage( object sp )       { Application.OpenURL( urlPublisherQuery + ( ( AssetPackage )sp ).publisher.label ); } //.id); }
         void OnMenuCategoryPage( object sp )        { Application.OpenURL( urlCategoryQuery + ( ( AssetPackage )sp ).category.id ); }
 

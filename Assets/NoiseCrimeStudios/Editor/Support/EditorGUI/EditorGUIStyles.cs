@@ -43,17 +43,13 @@ namespace NoiseCrimeStudios.Editor.IMGUI
 
         public static GUIStyle  scopeDark;
         public static GUIStyle  scopeLight;
-        public static GUIStyle  scopeStd;
-
-        public static Color     errorColor      = new Color( 0.5f, 0f, 0f );
-        public static Color     warningColor    = Color.yellow;
-        public static Color     normalColor     = Color.white;
-        public static Color     disabledColor   = Color.gray;
+        public static GUIStyle  scopeStd;             
 
         public static Color     colorContentNormal  = Color.white;
         public static Color     colorContentError   = new Color( 0.5f, 0f, 0f );
-        public static Color     colorContentWarning = Color.yellow;
-        public static Color     colorContentGreen   = Color.green;
+        public static Color     colorContentWarning = IsUsingDarkSkinMode ? Color.yellow : new Color( 0.6f, 0.4f, 0.0f );
+        public static Color     colorContentGreen   = IsUsingDarkSkinMode ? Color.green  : new Color( 0.0f, 0.6f, 0.0f );
+        public static Color     colorTextNormal     = IsUsingDarkSkinMode ? Color.white  : Color.black;
 
         // How to destroy these?
         public static Texture2D backgroundTxDark;
@@ -62,15 +58,23 @@ namespace NoiseCrimeStudios.Editor.IMGUI
 
         // GUISkin skin = EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector);
 
+        /// <summary>
+        /// Single access point to check for use of 'DarkSkin/ProSkin' use in Unity Editor.
+        /// </summary>
+        /// <remarks>
+        /// Switched from Application.HasProLicense() to EditorGUIUtility.isProSkin to fix issues with GUI Styles.
+        /// Enables easier testing.
+        /// Force this to return true if you want dark skin mode regardless.
+        /// </remarks>
+        public static bool IsUsingDarkSkinMode { get { return EditorGUIUtility.isProSkin; } } 
+
 
         static EditorGUIStyles()
         {
-            bool hasProLicense  = Application.HasProLicense();
-
             // Textures
-            backgroundTxDark    = EditorGUIMethods.CreateTexture( 8, 8, hasProLicense ? new Color32( 48, 48, 48, 255 ) : new Color32( 154, 154, 154, 255 ) );
-            backgroundTxLight   = EditorGUIMethods.CreateTexture( 8, 8, hasProLicense ? new Color32( 64, 64, 64, 255 ) : new Color32( 193, 193, 193, 255 ) );
-            backgroundTxStd     = EditorGUIMethods.CreateTexture( 8, 8, hasProLicense ? new Color32( 56, 56, 56, 255 ) : new Color32( 162, 162, 162, 255 ) );
+            backgroundTxDark    = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 48, 48, 48, 255 ) : new Color32( 154, 154, 154, 255 ) );
+            backgroundTxLight   = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 64, 64, 64, 255 ) : new Color32( 193, 193, 193, 255 ) );
+            backgroundTxStd     = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 56, 56, 56, 255 ) : new Color32( 162, 162, 162, 255 ) );
             //	backgroundTextureSelect	= IMGUIMethods.CreateTexture(8,8, new Color32(56,56,156,255));
 
             RectOffset margin  = new RectOffset(0,0,0,0);
@@ -127,7 +131,7 @@ namespace NoiseCrimeStudios.Editor.IMGUI
         /// <param name="iconNameFormat">'{0}ic_file_download_{1}_18dp_1x.png'</param>
         public static void CreateIconContent( ref Texture iconTexture, ref GUIContent iconContent, string materialIconsPath, string iconNameFormat, string contentText )
         {
-            string  iconColor   = Application.HasProLicense() ? "white" : "black";
+            string  iconColor   = "white"; // IsUsingDarkSkinMode ? "white" : "black";
 
             if ( null == iconTexture )
                 iconTexture = ( Texture )AssetDatabase.LoadAssetAtPath( string.Format( iconNameFormat, materialIconsPath, iconColor ), typeof( Texture ) );

@@ -324,11 +324,12 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
                 GUILayout.Space( 4f );
 
                 // Column Entries
+                GUI.contentColor = ap.isUnityStandardAsset ? EditorGUIStyles.colorContentWarning : EditorGUIStyles.colorTextNormal;
                 GuiCustomMenu ( ap, EditorGUIStyles.labelNormLeft, columnWidths[ 0 ] );
                 GUI.contentColor = ap.isArchived ? EditorGUIStyles.colorContentGreen : EditorGUIStyles.colorContentNormal;
                 EditorGUILayout.LabelField( ap.isArchived ? iconCheckContent : iconCancelContent, iconLabelStyle, GUILayout.Height( lineHeight ), GUILayout.Width( columnWidths[ 8 ] ) );
                 GUILayout.Space( 12f );
-                GUI.contentColor = ap.isUnityStandardAsset ? EditorGUIStyles.colorContentWarning : EditorGUIStyles.colorContentNormal;
+                GUI.contentColor = ap.isUnityStandardAsset ? EditorGUIStyles.colorContentWarning : EditorGUIStyles.colorTextNormal;
                 GuiCustomLabel( ap.version, EditorGUIStyles.labelNormLeft, columnWidths[ 3 ] );
                 GuiCustomLabel( ap.unity_version, EditorGUIStyles.labelNormLeft, columnWidths[ 1 ] );
                 GuiCustomLabel( ap.displayFileSize, EditorGUIStyles.labelNormRight, columnWidths[ 2 ] );

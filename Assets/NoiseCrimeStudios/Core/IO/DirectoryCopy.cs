@@ -7,9 +7,9 @@ namespace NoiseCrimeStudios.Core.IO
         /// <summary>Provides various settings for use when Copying Directories.</summary>
         public class CopyDirectorySettings
         {
-            public bool         enablePackageSizeLimit;
-            public int          packageSizeByteLimit;
-            public string[]     excludeSubDirectories;
+            public bool         EnablePackageSizeLimit;
+            public int          PackageSizeByteLimit;
+            public string[]     ExcludeSubDirectories;
         }
 
 
@@ -25,7 +25,8 @@ namespace NoiseCrimeStudios.Core.IO
 
             StringBuilderDebugLog  output      = new StringBuilderDebugLog( enableLogging );
 
-            if ( output.ExternalEnableLogging ) output.AppendLine( "-- FileCopying:CopyDirectory -- " );
+            if ( output.ExternalEnableLogging )
+                output.AppendLine( "-- FileCopying:CopyDirectory -- " );
 
             CopyDirectoryAll( diSource, diTarget, copyDirectorySettings, output );
 
@@ -33,12 +34,11 @@ namespace NoiseCrimeStudios.Core.IO
             {
                 output.InsertHardBreak();
                 output.AppendLine( "-- FileCopying:CopyDirectory -- " );
-                output.LogToConsole( true );
+                output.LogToConsole();
             }
         }
 
-
-        static void CopyDirectoryAll( DirectoryInfo source, DirectoryInfo target, CopyDirectorySettings copyDirectorySettings, StringBuilderDebugLog output )
+        private static void CopyDirectoryAll( DirectoryInfo source, DirectoryInfo target, CopyDirectorySettings copyDirectorySettings, StringBuilderDebugLog output )
         {
             // Will create all directories up to target.
             Directory.CreateDirectory( target.FullName );
@@ -52,7 +52,8 @@ namespace NoiseCrimeStudios.Core.IO
             // Copy each file into the new directory.
             foreach ( FileInfo fi in source.GetFiles() )
             {
-                if ( output.ExternalEnableLogging ) output.AppendFormat( "{0}", fi.Name );
+                if ( output.ExternalEnableLogging )
+                    output.AppendFormat( "{0}", fi.Name );
                 fi.CopyTo( Path.Combine( target.FullName, fi.Name ), true );
             }
 
@@ -62,12 +63,13 @@ namespace NoiseCrimeStudios.Core.IO
                 string  subDirectoryName    = diSourceSubDir.Name;
                 bool    isExcluded          = false;
 
-                foreach ( string exclusion in copyDirectorySettings.excludeSubDirectories )
+                foreach ( string exclusion in copyDirectorySettings.ExcludeSubDirectories )
                 {
                     if ( subDirectoryName == exclusion )
                     {
                         isExcluded = true;
-                        if ( output.ExternalEnableLogging ) output.AppendFormat( "{0} is Excluded", subDirectoryName );
+                        if ( output.ExternalEnableLogging )
+                            output.AppendFormat( "{0} is Excluded", subDirectoryName );
                         break;
                     }
                 }
@@ -79,7 +81,8 @@ namespace NoiseCrimeStudios.Core.IO
                 }
             }
 
-            if ( output.ExternalEnableLogging ) output.IndentDecrement();
+            if ( output.ExternalEnableLogging )
+                output.IndentDecrement();
         }
     }
 }

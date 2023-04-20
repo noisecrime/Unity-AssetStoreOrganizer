@@ -11,7 +11,7 @@ namespace NoiseCrimeStudios.Core.IO
     }
 
     /// <summary>Collection of System.IO Utility Methods.</summary>
-	/// <remarks>
+    /// <remarks>
     /// FilePathValidation
     /// <see cref="Assets\NoiseCrimeStudios\Core\Scripts\FileSupport\FilePathValidation.cs"/>
     /// UnityEditor.FileUtil is Unity's own collection of useful methods
@@ -57,7 +57,7 @@ namespace NoiseCrimeStudios.Core.IO
         }
 
         /// <summary>Returns the name of the final directory in the path. Works for files or folders</summary>
-		public static string GetNameOfDirectory( string directoryPath )
+        public static string GetNameOfDirectory( string directoryPath )
         {
             return new DirectoryInfo( directoryPath ).Name;
         }
@@ -69,6 +69,13 @@ namespace NoiseCrimeStudios.Core.IO
             return Path.GetFullPath( Path.Combine( Application.dataPath, relativePath ) );
         }
 
+        /// <summary>Returns the absolute path based on the Application Path (will not include Assets folder).</summary>
+        /// <remarks>e.g. F:\Folder\SubFolder\Project\ + / + relativePath</remarks>
+        public static string GetAbsoluteFullPath( string relativePath )
+        {
+            return Path.GetFullPath( relativePath );
+        }
+
         /// <summary>Returns the relative path ( to Unity Assets folder ) of an absolute path.</summary>
         public static string GetRelativeAssetPath( string absolutePath )
         {
@@ -78,8 +85,10 @@ namespace NoiseCrimeStudios.Core.IO
         /// <summary>Checks if a path is to a Directory, File or Unknown</summary>
         public static bool? IsPathToDirectory( string path )
         {
-            if ( string.IsNullOrEmpty( path ) ) return null;
-            if ( !Directory.Exists( path ) && !File.Exists( path ) ) return null;
+            if ( string.IsNullOrEmpty( path ) )
+                return null;
+            if ( !Directory.Exists( path ) && !File.Exists( path ) )
+                return null;
             FileAttributes attribute = File.GetAttributes(path);
             return FileAttributes.Directory == ( attribute & FileAttributes.Directory );
             //	return attribute.HasFlag(FileAttributes.Directory);
@@ -88,8 +97,10 @@ namespace NoiseCrimeStudios.Core.IO
         /// <summary>Checks if a path is to a Directory, File or Unknown</summary>
         public static PathType GetPathType( string path )
         {
-            if ( string.IsNullOrEmpty( path ) ) return PathType.Unknown;
-            if ( !Directory.Exists( path ) && !File.Exists( path ) ) return PathType.Unknown;
+            if ( string.IsNullOrEmpty( path ) )
+                return PathType.Unknown;
+            if ( !Directory.Exists( path ) && !File.Exists( path ) )
+                return PathType.Unknown;
             FileAttributes attribute = File.GetAttributes( path );
             return FileAttributes.Directory == ( attribute & FileAttributes.Directory ) ? PathType.Directory : PathType.File;
             //	return attribute.HasFlag(FileAttributes.Directory) ? PathType.Directory : PathType.File;

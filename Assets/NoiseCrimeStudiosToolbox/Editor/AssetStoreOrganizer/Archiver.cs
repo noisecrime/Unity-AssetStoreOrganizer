@@ -16,10 +16,10 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
     /// </remarks>
     public static class Archiver
     {
-        private static StringBuilderDebugLog          debugLogOutput      = new StringBuilderDebugLog();
+        private static readonly StringBuilderDebugLog s_debugLogOutput    = new StringBuilderDebugLog();
 
-        private static readonly string kOverwriteFile           = "{0}\nAlready exists in the AssetStore Directory.\nDo you want to overwrite the original file with\n{1}";
-        private static readonly string kRestoreMessageFormat    = "Are you sure you want to restore the package\n{0}\n({1})\nto\n{2}";
+        private static readonly string s_overwriteFile           = "{0}\nAlready exists in the AssetStore Directory.\nDo you want to overwrite the original file with\n{1}";
+        private static readonly string s_restoreMessageFormat    = "Are you sure you want to restore the package\n{0}\n({1})\nto\n{2}";
 
         /// <summary>
         /// Archive packages to supplied PackageLibrary.
@@ -48,29 +48,29 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
                 return;
             }
 
-            debugLogOutput.Clear();
-            debugLogOutput.IndentReset(16);
-            debugLogOutput.AppendLine( "-- ArchiveThePackagesInLibrary --" );
+            s_debugLogOutput.Clear();
+            s_debugLogOutput.IndentReset(16);
+            s_debugLogOutput.AppendLine( "-- ArchiveThePackagesInLibrary --" );
 
             for( int i=0; i < packages.Count; i++)
             {
                 EditorUtility.DisplayProgressBar( "Copy Packages to Archive",  packages[i].title, i/(float)packages.Count );
                 ArchiveAssetStorePackage( packages[i], archiveLib, sourceLocation, enableFileOperations, i);
-                debugLogOutput.InsertSoftBreak( 1536 );
+                s_debugLogOutput.InsertSoftBreak( 1536 );
             }
 
             EditorUtility.ClearProgressBar();
 
-            debugLogOutput.InsertHardBreak();
-            debugLogOutput.AppendLine( "-- ArchiveThePackagesInLibrary --" );
-            debugLogOutput.LogToConsole(true);
+            s_debugLogOutput.InsertHardBreak();
+            s_debugLogOutput.AppendLine( "-- ArchiveThePackagesInLibrary --" );
+            s_debugLogOutput.LogToConsole(true, true);
         }
         
         private static void ArchiveAssetStorePackage( AssetPackage package, PackageLibrary archiveLib, PackagesLocation sourceLocation, bool enableFileOperations, int counter )
         {
             if ( package.id == -1 ) // Ignore Legacy Builtin Unity StandardAssets.
             {
-                debugLogOutput.AppendFormat( "[{0:D4}][{1:D8}] IGNORED\t\t{2} - Builtin StandardAsset [{3}]", counter, package.id, package.title, package.fullFilePath );
+                s_debugLogOutput.AppendFormat( "[{0:D4}][{1:D8}] IGNORED\t\t{2} - Builtin StandardAsset [{3}]", counter, package.id, package.title, package.FullFilePath );
                 return;  
             }
 
@@ -81,12 +81,12 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 #if ENABLE_ARCHIVE_LOGS
             if ( matchState == MatchState.Exact )
             {
-                debugLogOutput.AppendFormat( "[{0:D4}][{1:D8}] EXISTS\t\t{2}", counter, package.id, package.title );
-                debugLogOutput.IndentIncrement( 4 );
-                debugLogOutput.AppendFormat( "{0} [package.fullFilePath]", package.fullFilePath );
-                debugLogOutput.AppendFormat( "{0} [archivePack.fullFilePath]", matchedPackage.fullFilePath );
-                debugLogOutput.IndentDecrement( 4 );
-                debugLogOutput.AppendLine();
+                s_debugLogOutput.AppendFormat( "[{0:D4}][{1:D8}] EXISTS\t\t{2}", counter, package.id, package.title );
+                s_debugLogOutput.IndentIncrement( 4 );
+                s_debugLogOutput.AppendFormat( "{0} [package.fullFilePath]", package.FullFilePath );
+                s_debugLogOutput.AppendFormat( "{0} [archivePack.fullFilePath]", matchedPackage.FullFilePath );
+                s_debugLogOutput.IndentDecrement( 4 );
+                s_debugLogOutput.AppendLine();
             }
 #endif           
             // If partial or no match found then copy the package.
@@ -114,13 +114,13 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
             }
 
             // Get the relative store package path
-            string relativeSrcPackagePath = package.fullFilePath.Replace( srcPackageDirectory + Path.DirectorySeparatorChar, "" );
+            string relativeSrcPackagePath = package.FullFilePath.Replace( srcPackageDirectory + Path.DirectorySeparatorChar, "" );
             // Remove filename from realtive path
             relativeSrcPackagePath        = Path.GetDirectoryName( relativeSrcPackagePath );
                        
             // Build archive filename for package
             string archiveFilename;
-            string storePackFileName    = Path.GetFileName( package.fullFilePath );
+            string storePackFileName    = Path.GetFileName( package.FullFilePath );
             string storePackVersion     = string.Format("[{0}]", package.version );
             string storePackVersionID   = string.Format("[{0}]", package.version_id );
                        
@@ -142,20 +142,20 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
 #if ENABLE_ARCHIVE_LOGS
             string copyText             = enableFileOperations ? "COPIED\t" : "COPY DISABLED";
-            debugLogOutput.AppendFormat( "[{0:D4}][{1:D8}] {2}\t{3}  (PartialMatch = {4})", counter, package.id, copyText, package.title, matchState );
-            debugLogOutput.IndentIncrement(4);
-            debugLogOutput.AppendFormat( "{0} [package.fullFilePath]",     package.fullFilePath );
-            debugLogOutput.AppendFormat( "{0} [archiveFilePath]",          archiveFilePath );
-            debugLogOutput.AppendFormat( "{0} [archivePackageDirectory]",  dstPackageDirectory );
-            debugLogOutput.AppendFormat( "{0} [storePackageDirectory]",    srcPackageDirectory );
-            debugLogOutput.AppendFormat( "{0} [relativeStorePackagePath]", relativeSrcPackagePath );            
-            debugLogOutput.AppendFormat( "{0} [archiveFilename]",          archiveFilename );
-            debugLogOutput.IndentDecrement(4);
-            debugLogOutput.AppendLine();
+            s_debugLogOutput.AppendFormat( "[{0:D4}][{1:D8}] {2}\t{3}  (PartialMatch = {4})", counter, package.id, copyText, package.title, matchState );
+            s_debugLogOutput.IndentIncrement(4);
+            s_debugLogOutput.AppendFormat( "{0} [package.fullFilePath]",     package.FullFilePath );
+            s_debugLogOutput.AppendFormat( "{0} [archiveFilePath]",          archiveFilePath );
+            s_debugLogOutput.AppendFormat( "{0} [archivePackageDirectory]",  dstPackageDirectory );
+            s_debugLogOutput.AppendFormat( "{0} [storePackageDirectory]",    srcPackageDirectory );
+            s_debugLogOutput.AppendFormat( "{0} [relativeStorePackagePath]", relativeSrcPackagePath );            
+            s_debugLogOutput.AppendFormat( "{0} [archiveFilename]",          archiveFilename );
+            s_debugLogOutput.IndentDecrement(4);
+            s_debugLogOutput.AppendLine();
 #endif
 
             if ( enableFileOperations )
-                CopyFile( package.fullFilePath, archiveFilePath, archiveDirectoryPath, false );
+                CopyFile( package.FullFilePath, archiveFilePath, archiveDirectoryPath, false );
         }
 
 
@@ -167,7 +167,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
                 return;
             }
 
-            if ( File.Exists( targetFilePath ) )
+            if ( File.Exists( targetFilePath ) && !overwrite )
             {
                 Debug.LogWarningFormat( "ArchiveMethods: The operation could not be completed because the file already exists.\n{0}\n{1}", sourceFilePath, targetFilePath );
                 return;
@@ -180,7 +180,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
             try
             {
-                sourceFileInfo.CopyTo( targetFilePath, false );
+                sourceFileInfo.CopyTo( targetFilePath, overwrite );
             }
             catch ( System.Exception ex )
             {
@@ -201,7 +201,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
             string storePackVersionID   = string.Format("[{0}]", package.version_id );
 
             string locationDirectory    = PathUtils.GetConsistentFilePath( OrganizerPaths.GetPackageDirectory( sourcelocation ));
-            string packageFilePath      = package.fullFilePath;
+            string packageFilePath      = package.FullFilePath;
             // Get Relative path
             string relativeFilePath     = packageFilePath.Replace( locationDirectory, "" ); // this will leave initial directory seperator!
             string relativeFileName     = Path.GetFileNameWithoutExtension( packageFilePath );
@@ -219,12 +219,12 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
             if ( File.Exists( destinationFilePath ) )
             {
-                string message = string.Format( kOverwriteFile, package.title, relativeFileName );
+                string message = string.Format( s_overwriteFile, package.title, relativeFileName );
                 overwrite = ( EditorUtility.DisplayDialog( "Restore Package To Asset Store", message, "OK", "Cancel" ) );
             }
             else
             {
-                string message = string.Format( kRestoreMessageFormat, package.title, relativeFileName, OrganizerPaths.StoreDirectoryBackup );
+                string message = string.Format( s_restoreMessageFormat, package.title, relativeFileName, OrganizerPaths.StoreDirectoryBackup );
                 comfirmed = ( EditorUtility.DisplayDialog( "Restore Package To Asset Store", message,  "OK", "Cancel" ) );           
             }
 
@@ -247,19 +247,19 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
             return restoreFile;
         }
-        
+
         /// <summary>Log to console the archived status of the storePackage.</summary>
         public static void LogPackageArchiveStatus( AssetPackage package, PackageLibrary library )
         {
             StringBuilderDebugLog output = new StringBuilderDebugLog();
 
-            if ( library.packageIDTable.ContainsKey( package.id ) )
+            if ( library.PackagesIDTable.ContainsKey( package.id ) )
             {
                 output.AppendFormat( "Store:\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}",
-                    package.unity_version, package.version, package.version_id, package.pubdate, package.title, package.fullFilePath );
+                    package.unity_version, package.version, package.version_id, package.pubdate, package.title, package.FullFilePath );
                 output.AppendLine();
 
-                foreach ( AssetPackage archivePack in library.packageIDTable[ package.id ] )
+                foreach ( AssetPackage archivePack in library.PackagesIDTable[ package.id ] )
                 {
                     bool matchName          = package.title == archivePack.title;
                     bool matchUnityVersion  = package.unity_version == archivePack.unity_version;
@@ -269,20 +269,22 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
                     bool matched            = matchName && matchUnityVersion && matchVersion && matchVersionID && matchPubDate;
 
                     output.AppendFormat( "Archive:\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}",
-                        archivePack.unity_version, archivePack.version, archivePack.version_id, archivePack.pubdate, archivePack.title, archivePack.fullFilePath );
+                        archivePack.unity_version, archivePack.version, archivePack.version_id, archivePack.pubdate, archivePack.title, archivePack.FullFilePath );
                     output.AppendFormat( "Archive:\t{0}\t{1}\t{2}\t{3}\t\t{4}",
                         matchUnityVersion, matchVersion, matchVersionID, matchPubDate, matchName );
 
-                    if (matched) output.AppendLine( "Package Archive Matched!" );                      
+                    if ( matched )
+                        output.AppendLine( "Package Archive Matched!" );
+
                     output.AppendLine();
                 }
             }
             else
             {
-                output.AppendFormat("Package Archive Status: Not Archived {0} [{1}]", package.title, package.id );
+                output.AppendFormat( "Package Archive Status: Not Archived {0} [{1}]", package.title, package.id );
             }
-            
-            output.LogToConsole( true );
+
+            output.LogToConsole( true, true );
         }
     }
 }

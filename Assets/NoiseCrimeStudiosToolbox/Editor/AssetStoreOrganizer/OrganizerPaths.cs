@@ -21,29 +21,29 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
     public static class OrganizerPaths
     {
         // Gets the root directory for Unity application data.
-        private static string storeDirectoryRoot    = Path.Combine( EnvironmentPath,  @"Unity");
+        private static readonly string s_storeDirectoryRoot    = Path.Combine( EnvironmentPath,  @"Unity");
         // Gets the Unity AssetStore legacy directory - pre Unity 5.x.
-        private static string storeDirectoryLegacy  = Path.Combine( EnvironmentPath,  @"Unity\Asset Store");
+        private static readonly string s_storeDirectoryLegacy  = Path.Combine( EnvironmentPath,  @"Unity\Asset Store");
         // Gets the Unity AssetStore modern directory from Unity 5.x and up.
-        private static string storeDirectoryModern  = Path.Combine( EnvironmentPath,  @"Unity\Asset Store-5.x");
+        private static readonly string s_storeDirectoryModern  = Path.Combine( EnvironmentPath,  @"Unity\Asset Store-5.x");
         
         // Static strings for Editor Preference Keys
-        private static readonly string  customDirectoryEditorKey = @"com.noisecrimestudios.assetStoreManager.customDirectory";
-        private static readonly string  backupDirectoryEditorKey = @"com.noisecrimestudios.assetStoreManager.backupDirectory";
+        private static readonly string  s_customDirectoryEditorKey = @"com.noisecrimestudios.assetStoreManager.customDirectory";
+        private static readonly string  s_backupDirectoryEditorKey = @"com.noisecrimestudios.assetStoreManager.backupDirectory";
 
 
         /// <summary>Get/Set the directory used for custom assetstore location.</summary>
         public static string StoreDirectoryCustom
-		{
-            get { return EditorPrefs.GetString( customDirectoryEditorKey, string.Empty); }
-            set { EditorPrefs.SetString( customDirectoryEditorKey, value); }
+        {
+            get { return EditorPrefs.GetString( s_customDirectoryEditorKey, string.Empty); }
+            set { EditorPrefs.SetString( s_customDirectoryEditorKey, value); }
         }
 
         /// <summary>Get/Set the directory used for assetstore backup location.</summary>
         public static string StoreDirectoryBackup
-		{
-            get { return EditorPrefs.GetString( backupDirectoryEditorKey, string.Empty); }
-            set { EditorPrefs.SetString( backupDirectoryEditorKey, value); }
+        {
+            get { return EditorPrefs.GetString( s_backupDirectoryEditorKey, string.Empty); }
+            set { EditorPrefs.SetString( s_backupDirectoryEditorKey, value); }
         }
         
         /// <summary>Gets the parent Directory for the Unity Application from system environment.</summary>
@@ -53,41 +53,46 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         }
 
         /// <summary>Gets the root directory for Unity application data.</summary>
-        public static string StoreDirectoryRoot     { get { return storeDirectoryRoot; } }
+        public static string StoreDirectoryRoot     { get { return s_storeDirectoryRoot; } }
 
         /// <summary>Gets the Unity AssetStore legacy directory - pre Unity 5.x.</summary>
-        public static string StoreDirectoryLegacy   { get { return storeDirectoryLegacy; } }
+        public static string StoreDirectoryLegacy   { get { return s_storeDirectoryLegacy; } }
 
         /// <summary>Gets the Unity AssetStore modern directory from Unity 5.x and up.</summary>
-        public static string StoreDirectoryModern   { get { return storeDirectoryModern; } }
+        public static string StoreDirectoryModern   { get { return s_storeDirectoryModern; } }
 
         /// <summary>Resturns the directory path to the desired Packages Location.</summary>
         public static string GetPackageDirectory( PackagesLocation packagesLocation )
         {
             switch ( packagesLocation )
-			{
-                case PackagesLocation.NativePackageList:    return StoreDirectoryRoot;
-				case PackagesLocation.AssetStore:           return StoreDirectoryLegacy;
-				case PackagesLocation.AssetStore5x:         return StoreDirectoryModern;
-				case PackagesLocation.Custom:               return StoreDirectoryCustom;
-                case PackagesLocation.Archive:              return StoreDirectoryBackup;                    
-                default:   
-                    Assert.IsTrue( false, string.Format( "StorePackageLibrary:GetPackageDirectory: Unhandled enum in switch case {0}", packagesLocation ) );                    
+            {
+                case PackagesLocation.NativePackageList:
+                    return StoreDirectoryRoot;
+                case PackagesLocation.AssetStore:
+                    return StoreDirectoryLegacy;
+                case PackagesLocation.AssetStore5x:
+                    return StoreDirectoryModern;
+                case PackagesLocation.Custom:
+                    return StoreDirectoryCustom;
+                case PackagesLocation.Archive:
+                    return StoreDirectoryBackup;
+                default:
+                    Assert.IsTrue( false, string.Format( "StorePackageLibrary:GetPackageDirectory: Unhandled enum in switch case {0}", packagesLocation ) );
                     return "";
-			}
+            }
         }
 
         /// <summary>Sets the directory path for the desired packages location if applicable.</summary>
         public static void SetPackageDirectory( PackagesLocation packagesLocation, string path )
         {
             switch ( packagesLocation )
-			{
+            {
                 case PackagesLocation.NativePackageList:
-				case PackagesLocation.AssetStore:
-				case PackagesLocation.AssetStore5x:
+                case PackagesLocation.AssetStore:
+                case PackagesLocation.AssetStore5x:
                     Debug.LogErrorFormat("StorePackageLibrary:SetPackageDirectory: Setting {0} is not permitted.", packagesLocation );
                     break;
-				case PackagesLocation.Custom:
+                case PackagesLocation.Custom:
                     StoreDirectoryCustom = path;
                     break;
                 case PackagesLocation.Archive:
@@ -96,7 +101,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
                 default:   
                     Assert.IsTrue( false, string.Format( "StorePackageLibrary:SetPackageDirectory: Unhandled enum in switch case {0}", packagesLocation ) );                    
                     break;
-			}
+            }
         }
 
         public static void LogToConsole()

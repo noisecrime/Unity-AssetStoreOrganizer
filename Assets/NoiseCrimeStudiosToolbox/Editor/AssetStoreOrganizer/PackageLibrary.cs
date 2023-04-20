@@ -5,27 +5,25 @@ using NoiseCrimeStudios.Core.Formatting;
 using NoiseCrimeStudios.Core.IO;
 using UnityEditor;
 using UnityEngine.Assertions;
+using Debug = UnityEngine.Debug;
 
 namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 {
-    // Aliases
-    using Debug = UnityEngine.Debug;
-        
     public enum MatchState { None, Partial, Exact }
 
     /// <summary>Library holds all packages found within the specificed directory location.</summary>
     public class PackageLibrary
     {        
-        private static readonly string[]            searchPatterns = new string[]{ "*.unitypackage" };
+        private static readonly string[]            s_searchPatterns = new string[]{ "*.unitypackage" };
 
-        public List<AssetPackage>                   packageLibrary = new List<AssetPackage>();
-        public Dictionary<int, List<AssetPackage>>  packageIDTable = new Dictionary<int, List<AssetPackage>>();
+        public List<AssetPackage>                   Packages        = new List<AssetPackage>();
+        public Dictionary<int, List<AssetPackage>>  PackagesIDTable = new Dictionary<int, List<AssetPackage>>();
 
 
         /// <summary>Returns number of files or packages checked.</summary>
         public int              FileCount       { get; private set; }
         /// <summary>Returns number of packages in Library.</summary>
-        public int              PackageCount    { get { return packageLibrary.Count; } }
+        public int              PackageCount    { get { return Packages.Count; } }
         /// <summary>Returns a display string formatting of the file size of all packages on disk.</summary>
         public string           SizeOnDisk      { get; private set; }
 
@@ -43,51 +41,61 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         {
             Location = packagesLocation;
 
-            packageLibrary.Clear();            
-            packageIDTable.Clear();
+            Packages.Clear();            
+            PackagesIDTable.Clear();
 
             // Build packages list
             switch ( packagesLocation )
-			{
-                case PackagesLocation.NativePackageList:    PopulateFromPackageList(); break;
-				case PackagesLocation.AssetStore:           PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryLegacy ); break;
-				case PackagesLocation.AssetStore5x:         PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryModern ); break;
-				case PackagesLocation.Custom:               PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryCustom ); break;
-                case PackagesLocation.Archive:              PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryBackup ); break;
-                default:   
-                    Assert.IsTrue( false, string.Format( "StorePackageLibrary: Unhandled enum in switch case {0}", packagesLocation ) ); 
+            {
+                case PackagesLocation.NativePackageList:
+                    PopulateFromPackageList();
                     break;
-			}
+                case PackagesLocation.AssetStore:
+                    PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryLegacy );
+                    break;
+                case PackagesLocation.AssetStore5x:
+                    PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryModern );
+                    break;
+                case PackagesLocation.Custom:
+                    PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryCustom );
+                    break;
+                case PackagesLocation.Archive:
+                    PopulateFileSearchBegin( OrganizerPaths.StoreDirectoryBackup );
+                    break;
+                default:
+                    Assert.IsTrue( false, string.Format( "StorePackageLibrary: Unhandled enum in switch case {0}", packagesLocation ) );
+                    break;
+            }
 
             // Build lookuptable for existing archive packages by id, with multiple packages added to value list.       
-            foreach ( AssetPackage sp in packageLibrary )
+            foreach ( AssetPackage sp in Packages )
             {
-                List<AssetPackage> list;
+               List<AssetPackage> list;
 
-                if ( packageIDTable.TryGetValue( sp.id, out list ) )
+               if ( PackagesIDTable.TryGetValue( sp.id, out list ) )
                     list.Add( sp );
                else
-                    packageIDTable.Add( sp.id, new List<AssetPackage>(){ sp } );            
+                    PackagesIDTable.Add( sp.id, new List<AssetPackage>(){ sp } );            
             }
         }
 
         /// <summary>Populates packages list from Unity provided native PackageInfo Method.</summary>
         private void PopulateFromPackageList()
-		{
+        {
             long libraryDiskSize = 0;
 
-			var flags		= BindingFlags.Static | BindingFlags.NonPublic;
-			var methodInfo	= typeof(PackageInfo).GetMethod("GetPackageList", flags);
-			object result	= methodInfo.Invoke(null, null ); 
+            var flags		= BindingFlags.Static | BindingFlags.NonPublic;
+            var methodInfo	= typeof(PackageInfo).GetMethod("GetPackageList", flags);
+            object result	= methodInfo.Invoke(null, null ); 
 
-			PackageInfo[] packageList = (PackageInfo[])result;
+            PackageInfo[] packageList = (PackageInfo[])result;
 
-			foreach ( PackageInfo p in packageList )			
-				libraryDiskSize += AssetPackage.PopulateFromPackageInfo( p, packageLibrary );
-			
+            foreach ( PackageInfo p in packageList )			
+                libraryDiskSize += AssetPackage.PopulateFromPackageInfo( p, Packages );
+            
             SizeOnDisk  = Numerical.ByteCountToSuffixHumbads( libraryDiskSize );
             FileCount   = packageList.Length;
-		}
+        }
 
         /// <summary>Populates packages list from iterating through the provided directory.</summary>
         private void PopulateFileSearchBegin( string packagesPath )
@@ -101,7 +109,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
              int  fileCounter       = 0;
              long libraryDiskSize   = 0;
 
-             GetFilesRecursiveViaMultiplePatterns( packagesPath, searchPatterns, true, ref fileCounter, ref libraryDiskSize);
+             GetFilesRecursiveViaMultiplePatterns( packagesPath, s_searchPatterns, true, ref fileCounter, ref libraryDiskSize);
 
             SizeOnDisk  = Numerical.ByteCountToSuffixHumbads( libraryDiskSize ); 
             FileCount   = fileCounter;
@@ -109,27 +117,27 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         
         /// <summary>Given a path and search pattern will populate Library from package files found in directory.</summary>
         private void GetFilesRecursiveViaMultiplePatterns( string packagesPath, string[] searchPatterns, bool subFolders, ref int fileCounter, ref long libraryDiskSize )
-		{
+        {
             if ( !DirectoryUtils.IsValidPathToDirectory( packagesPath ) )
             { 
                 Debug.LogWarningFormat("PackageLibrary: Directory does not exist\n{0}", packagesPath);
                 return;
             }
 
-			string[] directories = Directory.GetDirectories( packagesPath );
+            string[] directories = Directory.GetDirectories( packagesPath );
 
-			foreach ( string directory in directories )			
-				GetFilesRecursiveViaMultiplePatterns( directory, searchPatterns, subFolders, ref fileCounter, ref libraryDiskSize );				
-					
-			foreach ( string sp in searchPatterns )
-			{
-				string[] tmpFiles = Directory.GetFiles( packagesPath, sp );
-				fileCounter += tmpFiles.Length;
+            foreach ( string directory in directories )			
+                GetFilesRecursiveViaMultiplePatterns( directory, searchPatterns, subFolders, ref fileCounter, ref libraryDiskSize );				
+                    
+            foreach ( string sp in searchPatterns )
+            {
+                string[] tmpFiles = Directory.GetFiles( packagesPath, sp );
+                fileCounter += tmpFiles.Length;
 
-				foreach ( string fullFilePath in tmpFiles )
-					libraryDiskSize += AssetPackage.CreatePackageInfoFromLocalStorage( fullFilePath, packageLibrary );			
-			}			
-		}
+                foreach ( string fullFilePath in tmpFiles )
+                    libraryDiskSize += AssetPackage.CreatePackageInfoFromLocalStorage( fullFilePath, Packages );			
+            }			
+        }
 
         /*
         public void CompareAgainstArchive( PackageArchive storePackageArchives )
@@ -140,8 +148,8 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
         public void CompareAgainstArchive( PackageLibrary archiveLibrary )
         {
-            foreach( AssetPackage pack in packageLibrary )            
-               pack.isArchived = ( archiveLibrary.ContainsPackage( pack ) == MatchState.Exact );
+            foreach( AssetPackage pack in Packages )            
+               pack.IsArchived = ( archiveLibrary.ContainsPackage( pack ) == MatchState.Exact );
         }
 
         /*
@@ -156,7 +164,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         {
             List<AssetPackage> packages;
 
-            if ( packageIDTable.TryGetValue( package.id, out packages ) )
+            if ( PackagesIDTable.TryGetValue( package.id, out packages ) )
             {
                 bool partialMatch = true;
 
@@ -172,13 +180,14 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
                     // Maintain Partial Match State in case we don't find exact match.
                     // Have found cases where we get a name and version match but other data is mismatched.
-                    partialMatch            = partialMatch | ( matchName && matchVersion && !exactMatched );
+                    partialMatch |= ( matchName && matchVersion && !exactMatched );
 
                     if ( exactMatched )
                         return MatchState.Exact;                  
                 }
 
-                if ( partialMatch ) return MatchState.Partial;  
+                if ( partialMatch )
+                    return MatchState.Partial;  
             }
 
             return MatchState.None;
@@ -192,11 +201,10 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
         /// <returns>Matched state and if matched the AssetPackage in result.</returns>
         public MatchState TryGetMatchedPackage( AssetPackage package, out AssetPackage result )
         {
+            result = null;
             List<AssetPackage> packages;
 
-            result = null;
-
-            if ( packageIDTable.TryGetValue( package.id, out packages ) )
+            if ( PackagesIDTable.TryGetValue( package.id, out packages ) )
             {
                 bool partialMatch = true;
 
@@ -212,7 +220,7 @@ namespace NoiseCrimeStudios.Toolbox.AssetStoreOrganizer
 
                     // Maintain Partial Match State in case we don't find exact match.
                     // Have found cases where we get a name and version match but other data is mismatched.
-                    partialMatch            = partialMatch | ( matchName && matchVersion && !exactMatched );
+                    partialMatch |= ( matchName && matchVersion && !exactMatched );
 
                     if ( exactMatched )
                     {

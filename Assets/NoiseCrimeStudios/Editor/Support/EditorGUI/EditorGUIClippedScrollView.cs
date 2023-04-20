@@ -9,13 +9,13 @@ namespace NoiseCrimeStudios.Editor.IMGUI
     /// </remarks>
     public class EditorGUIClippedScrollView
     {
-        public int      itemStartIndex          { get; set; }
-        public int      itemLastIndex           { get; set; }
-        public float    pixelStartHeight        { get; set; }
-        public float    pixelEndHeight          { get; set; }
+        public int      ItemStartIndex          { get; set; }
+        public int      ItemLastIndex           { get; set; }
+        public float    PixelStartHeight        { get; set; }
+        public float    PixelEndHeight          { get; set; }
 
-        public Rect     lastScrollRectResults   { get; set; }
-        public string   information             { get; set; }
+        public Rect     LastScrollRectResults   { get; set; }
+        public string   Information             { get; set; }
 
         /// <summary>Support for a clipped Unity IMGUI ScrollView.</summary>
         /// <param name="itemCount">Number of items in List being displayed in scrollview.</param>
@@ -29,27 +29,29 @@ namespace NoiseCrimeStudios.Editor.IMGUI
         public void Update( int itemCount, float lineHeight, float scrollPosY )
         {
             float   rowHeight   = lineHeight + 2f;
-            int     maxRows     = Mathf.FloorToInt( lastScrollRectResults.height / rowHeight ) + 2;
-            itemStartIndex      = Mathf.FloorToInt( scrollPosY / rowHeight );
-            itemLastIndex       = itemStartIndex + maxRows;
+            int     maxRows     = Mathf.FloorToInt( LastScrollRectResults.height / rowHeight ) + 2;
+            ItemStartIndex      = Mathf.FloorToInt( scrollPosY / rowHeight );
+            ItemLastIndex       = ItemStartIndex + maxRows;
 
-            pixelStartHeight    = itemStartIndex * rowHeight;
-            pixelEndHeight      = itemCount * rowHeight - itemStartIndex * rowHeight - maxRows * rowHeight;
+            PixelStartHeight    = ItemStartIndex * rowHeight;
+            PixelEndHeight      = itemCount * rowHeight - ItemStartIndex * rowHeight - maxRows * rowHeight;
 
-            if ( itemLastIndex > itemCount ) itemLastIndex = itemCount;
-            if ( pixelEndHeight < 0f ) pixelEndHeight = 0f;
+            if ( ItemLastIndex > itemCount )
+                ItemLastIndex = itemCount;
+            if ( PixelEndHeight < 0f )
+                PixelEndHeight = 0f;
 
-            information = string.Format
+            Information = string.Format
                 (
                 "Information: Count: {0}  Rows: {1}   Index: [ {2} | {3} | {4} ]  scrollPos: {5}  Height [ Rows: {6} View: {7} total {8} / {9} ]  pixel: {10} / {11}",
                 itemCount, maxRows,
-                itemStartIndex, itemLastIndex, itemCount - itemLastIndex,
+                ItemStartIndex, ItemLastIndex, itemCount - ItemLastIndex,
                 scrollPosY,
                 maxRows * rowHeight,
-                lastScrollRectResults.height,
+                LastScrollRectResults.height,
                 itemCount * rowHeight,
-                pixelStartHeight + pixelEndHeight + lastScrollRectResults.height,
-                pixelStartHeight, pixelEndHeight
+                PixelStartHeight + PixelEndHeight + LastScrollRectResults.height,
+                PixelStartHeight, PixelEndHeight
                 );
         }
     }

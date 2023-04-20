@@ -19,42 +19,42 @@ namespace NoiseCrimeStudios.Editor.IMGUI
         #endregion
 
         #region Label Styles		
-        public static GUIStyle  labelBgLightLeft;
-        public static GUIStyle  labelBgLightRight;
-        public static GUIStyle  labelBgDarkLeft;
-        public static GUIStyle  labelBgDarkRight;
-        public static GUIStyle  labelBgStdLeft;
-        public static GUIStyle  labelBgStdRight;
+        public static GUIStyle  LabelBgLightLeft;
+        public static GUIStyle  LabelBgLightRight;
+        public static GUIStyle  LabelBgDarkLeft;
+        public static GUIStyle  LabelBgDarkRight;
+        public static GUIStyle  LabelBgStdLeft;
+        public static GUIStyle  LabelBgStdRight;
 
-        public static GUIStyle  labelNormLeft;
-        public static GUIStyle  labelNormRight;
-        public static GUIStyle  labelBoldLeft;
-        public static GUIStyle  labelBoldRight;
+        public static GUIStyle  LabelNormLeft;
+        public static GUIStyle  LabelNormRight;
+        public static GUIStyle  LabelBoldLeft;
+        public static GUIStyle  LabelBoldRight;
 
-        public static GUIStyle  labelNormIcon;
+        public static GUIStyle  LabelNormIcon;
         #endregion
 
-        public static GUIStyle  fullButton;
+        public static GUIStyle  FullButton;
 
-        public static GUIStyle  miniButtonDark;
-        public static GUIStyle  miniButtonLight;
+        public static GUIStyle  MiniButtonDark;
+        public static GUIStyle  MiniButtonLight;
 
-        public static GUIStyle  textAreaImage;
+        public static GUIStyle  TextAreaImage;
 
-        public static GUIStyle  scopeDark;
-        public static GUIStyle  scopeLight;
-        public static GUIStyle  scopeStd;             
+        public static GUIStyle  ScopeDark;
+        public static GUIStyle  ScopeLight;
+        public static GUIStyle  ScopeStd;             
 
-        public static Color     colorContentNormal  = Color.white;
-        public static Color     colorContentError   = new Color( 0.5f, 0f, 0f );
-        public static Color     colorContentWarning = IsUsingDarkSkinMode ? Color.yellow : new Color( 0.6f, 0.4f, 0.0f );
-        public static Color     colorContentGreen   = IsUsingDarkSkinMode ? Color.green  : new Color( 0.0f, 0.6f, 0.0f );
-        public static Color     colorTextNormal     = IsUsingDarkSkinMode ? Color.white  : Color.black;
+        public static Color     ColorContentNormal  = Color.white;
+        public static Color     ColorContentError   = new Color( 0.5f, 0f, 0f );
+        public static Color     ColorContentWarning = IsUsingDarkSkinMode ? Color.yellow : new Color( 0.6f, 0.4f, 0.0f );
+        public static Color     ColorContentGreen   = IsUsingDarkSkinMode ? Color.green  : new Color( 0.0f, 0.6f, 0.0f );
+        public static Color     ColorTextNormal     = IsUsingDarkSkinMode ? Color.white  : Color.black;
 
         // How to destroy these?
-        public static Texture2D backgroundTxDark;
-        public static Texture2D backgroundTxStd;
-        public static Texture2D backgroundTxLight;
+        public static Texture2D BackgroundTxDark;
+        public static Texture2D BackgroundTxStd;
+        public static Texture2D BackgroundTxLight;
 
         // GUISkin skin = EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector);
 
@@ -68,52 +68,54 @@ namespace NoiseCrimeStudios.Editor.IMGUI
         /// </remarks>
         public static bool IsUsingDarkSkinMode { get { return EditorGUIUtility.isProSkin; } } 
 
-
         static EditorGUIStyles()
         {
             // Textures
-            backgroundTxDark    = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 48, 48, 48, 255 ) : new Color32( 154, 154, 154, 255 ) );
-            backgroundTxLight   = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 64, 64, 64, 255 ) : new Color32( 193, 193, 193, 255 ) );
-            backgroundTxStd     = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 56, 56, 56, 255 ) : new Color32( 162, 162, 162, 255 ) );
+            BackgroundTxDark    = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 48, 48, 48, 255 ) : new Color32( 154, 154, 154, 255 ) );
+            BackgroundTxLight   = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 64, 64, 64, 255 ) : new Color32( 193, 193, 193, 255 ) );
+            BackgroundTxStd     = EditorGUIMethods.CreateTexture( 8, 8, IsUsingDarkSkinMode ? new Color32( 56, 56, 56, 255 ) : new Color32( 162, 162, 162, 255 ) );
             //	backgroundTextureSelect	= IMGUIMethods.CreateTexture(8,8, new Color32(56,56,156,255));
 
             RectOffset margin  = new RectOffset(0,0,0,0);
             RectOffset padding = new RectOffset(2,2,2,2);
 
-            DefineStyle( ref fullButton, GUI.skin.button, FontStyle.Normal, TextAnchor.MiddleCenter, null, null, margin, new RectOffset( 2, 2, 2, 2 ) );
+            DefineStyle( ref FullButton, GUI.skin.button, FontStyle.Normal, TextAnchor.MiddleCenter, null, null, margin, new RectOffset( 2, 2, 2, 2 ) );
 
-            DefineStyle( ref scopeLight,        EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, backgroundTxLight, null, margin, padding );
-            DefineStyle( ref scopeStd,          EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, backgroundTxStd, null, margin, padding );
-            DefineStyle( ref scopeDark,         EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, backgroundTxDark, null, margin, padding );
+            DefineStyle( ref ScopeLight,        EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, BackgroundTxLight, null, margin, padding );
+            DefineStyle( ref ScopeStd,          EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, BackgroundTxStd, null, margin, padding );
+            DefineStyle( ref ScopeDark,         EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, BackgroundTxDark, null, margin, padding );
 
-            DefineStyle( ref miniButtonLight,   EditorStyles.miniButton, EditorStyles.miniButton.fontStyle, EditorStyles.miniButton.alignment, backgroundTxLight );
-            DefineStyle( ref miniButtonDark,    EditorStyles.miniButton, EditorStyles.miniButton.fontStyle, EditorStyles.miniButton.alignment, backgroundTxDark );
+            DefineStyle( ref MiniButtonLight,   EditorStyles.miniButton, EditorStyles.miniButton.fontStyle, EditorStyles.miniButton.alignment, BackgroundTxLight );
+            DefineStyle( ref MiniButtonDark,    EditorStyles.miniButton, EditorStyles.miniButton.fontStyle, EditorStyles.miniButton.alignment, BackgroundTxDark );
 
-            DefineStyle( ref labelBgLightLeft,  EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft, backgroundTxLight );
-            DefineStyle( ref labelBgLightRight, EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight, backgroundTxLight );
-            DefineStyle( ref labelBgStdLeft,    EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft, backgroundTxStd );
-            DefineStyle( ref labelBgStdRight,   EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight, backgroundTxStd );
-            DefineStyle( ref labelBgDarkLeft,   EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft, backgroundTxDark );
-            DefineStyle( ref labelBgDarkRight,  EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight, backgroundTxDark );
+            DefineStyle( ref LabelBgLightLeft,  EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft, BackgroundTxLight );
+            DefineStyle( ref LabelBgLightRight, EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight, BackgroundTxLight );
+            DefineStyle( ref LabelBgStdLeft,    EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft, BackgroundTxStd );
+            DefineStyle( ref LabelBgStdRight,   EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight, BackgroundTxStd );
+            DefineStyle( ref LabelBgDarkLeft,   EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft, BackgroundTxDark );
+            DefineStyle( ref LabelBgDarkRight,  EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight, BackgroundTxDark );
 
-            DefineStyle( ref labelNormLeft,     EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft );
-            DefineStyle( ref labelNormRight,    EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight );
-            DefineStyle( ref labelBoldLeft,     EditorStyles.label, FontStyle.Bold,     TextAnchor.MiddleLeft );
-            DefineStyle( ref labelBoldRight,    EditorStyles.label, FontStyle.Bold,     TextAnchor.MiddleRight );
-            DefineStyle( ref labelNormIcon,     EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, null, null, null, new RectOffset( 2, 2, 2, 2 ) );
+            DefineStyle( ref LabelNormLeft,     EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleLeft );
+            DefineStyle( ref LabelNormRight,    EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleRight );
+            DefineStyle( ref LabelBoldLeft,     EditorStyles.label, FontStyle.Bold,     TextAnchor.MiddleLeft );
+            DefineStyle( ref LabelBoldRight,    EditorStyles.label, FontStyle.Bold,     TextAnchor.MiddleRight );
+            DefineStyle( ref LabelNormIcon,     EditorStyles.label, FontStyle.Normal,   TextAnchor.MiddleCenter, null, null, null, new RectOffset( 2, 2, 2, 2 ) );
 
-            textAreaImage = new GUIStyle( EditorStyles.textArea )
+            TextAreaImage = new GUIStyle( EditorStyles.textArea )
             {
                 imagePosition = ImagePosition.ImageOnly,
                 alignment = TextAnchor.MiddleCenter
             };
         }
 
-        static void DefineStyle( ref GUIStyle style, GUIStyle from, FontStyle font, TextAnchor anchor, Texture2D normalBG = null, RectOffset border = null, RectOffset margin = null, RectOffset padding = null )
+        private static void DefineStyle( ref GUIStyle style, GUIStyle from, FontStyle font, TextAnchor anchor, Texture2D normalBG = null, RectOffset border = null, RectOffset margin = null, RectOffset padding = null )
         {
-            if ( null == border ) border = from.border;
-            if ( null == margin ) margin = from.margin;
-            if ( null == padding ) padding = from.padding;
+            if ( null == border )
+                border = from.border;
+            if ( null == margin )
+                margin = from.margin;
+            if ( null == padding )
+                padding = from.padding;
 
             style = new GUIStyle( from )
             {
@@ -124,7 +126,8 @@ namespace NoiseCrimeStudios.Editor.IMGUI
                 padding = padding
             };
 
-            if ( null != normalBG ) style.normal.background = normalBG;
+            if ( null != normalBG )
+                style.normal.background = normalBG;
         }
 
         /// <summary>Create Google Material Icons & Content Helper Method.</summary>		

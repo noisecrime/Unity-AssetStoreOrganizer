@@ -14,7 +14,7 @@ namespace NoiseCrimeStudios.Editor.Internal
 #else
         [MenuItem( "Window/Internal/Undo Window", false, 113 )]
 #endif        
-        static void GUIViewDebuggerWindow()
+        private static void GUIViewDebuggerWindow()
         {
             EditorWindow.GetWindow ( typeof( EditorApplication ).Assembly.GetType ("UnityEditor.UndoWindow") );
         }

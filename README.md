@@ -144,7 +144,7 @@ The name of the package. Click this area to access a dropdown menu:
 
 
 ## Updates
-*2023.04.20 () - Updated NoiseCrimeStudios Core Namespaces to match current projects.
+* 2023.04.20 (c78c424) - Updated NoiseCrimeStudios Core Namespaces to match current projects.
 
 * 2023.04.20 (430d1eb) - Updated EditorConfig to match the standard I'm using for all current and future projects. Resulted in a large amount of changes to files, but limited to things like addressing Name Rule violations, layout, explicit 'private' of methods and line endings.
 

@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace NoiseCrimeStudios.Editor.Internal
+namespace NoiseCrimeStudios.Core.Editor.Internal
 {
     /// <summary>Adds the Internal Unity Undo Debugger to the Widow Menu.</summary>
     /// <remarks>

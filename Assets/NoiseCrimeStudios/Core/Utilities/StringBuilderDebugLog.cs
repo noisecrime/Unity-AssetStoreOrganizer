@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace NoiseCrimeStudios.Core
+namespace NoiseCrimeStudios.Core.Utilities
 {
     /// <summary>
     /// Stringbuilder based logging with features for use via Debug.Log.

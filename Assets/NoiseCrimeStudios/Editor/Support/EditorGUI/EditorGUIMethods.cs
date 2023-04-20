@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace NoiseCrimeStudios.Editor.IMGUI
+namespace NoiseCrimeStudios.Core.Editor.IMGUI
 {
     /// <summary>Collection of static methods to help with Unity's Immediate Mode GUI layout.</summary>
     public static class EditorGUIMethods

@@ -1,14 +1,14 @@
 #if !UNITY_2019_4_OR_NEWER
 using UnityEditor;
 
-namespace NoiseCrimeStudios.Editor.Internal
+namespace NoiseCrimeStudios.Core.Editor.Internal
 {
     /// <summary>Adds the Internal Unity IMGUI Debugger to the Window Menu.</summary>
     /// <remarks>
     /// Source:      UnityCsReference\Editor\Mono\GUIDebugger\GUIViewDebuggerWindow.cs
     /// MenuItem:    [MenuItem("Window/Analysis/IMGUI Debugger", false, 102, true)]
     /// </remarks>
-	public static class InternalDebugIMGUI
+    public static class InternalDebugIMGUI
     {
 #if UNITY_2018_2_OR_NEWER
         [MenuItem( "Window/Analysis/IMGUI Debugger", false, 112 )]

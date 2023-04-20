@@ -9,6 +9,22 @@ namespace NoiseCrimeStudios.Core.Formatting
 {
     public static class Numerical
     {
+#if UNITY_2019_4_OR_NEWER
+        /// <summary>
+        /// Returns the number of digits for a Int32 value.
+        /// </summary>    
+        /// <see cref="https://stackoverflow.com/questions/4483886/how-can-i-get-a-count-of-the-total-number-of-digits-in-a-number"/>
+        public static int Int32_Digits_Log10( this int n ) =>
+            n == 0 ? 1 : ( n > 0 ? 1 : 2 ) + ( int )Math.Log10( Math.Abs( ( double )n ) );
+
+        /// <summary>
+        /// Returns the number of digits for a Int32 value.
+        /// </summary>    
+        /// <see cref="https://stackoverflow.com/questions/4483886/how-can-i-get-a-count-of-the-total-number-of-digits-in-a-number"/>
+        public static int Int64_Digits_Log10( this long n ) =>
+            n == 0L ? 1 : ( n > 0L ? 1 : 2 ) + ( int )Math.Log10( Math.Abs( ( double )n ) );
+#endif
+
         // Overall this has proven to be the most efficeint method to use from this page
         // https://stackoverflow.com/questions/281640/how-do-i-get-a-human-readable-file-size-in-bytes-abbreviation-using-net#4975942
         // Returns the human-readable file size for an arbitrary, 64-bit file size. However it reverts to bytes for long.MinValue

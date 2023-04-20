@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NoiseCrimeStudios.Core.Editor;
+using NoiseCrimeStudios.Core.Editor.IMGUI;
 using NoiseCrimeStudios.Core.Formatting;
-using NoiseCrimeStudios.Editor;
-using NoiseCrimeStudios.Editor.IMGUI;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

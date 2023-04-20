@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace NoiseCrimeStudios.Editor.Internal
+namespace NoiseCrimeStudios.Core.Editor.Internal
 { 
     /// <summary>
     /// Exposes the native Unity 'ScreenShotting' methods to Unity Menu & Shortcut keys.

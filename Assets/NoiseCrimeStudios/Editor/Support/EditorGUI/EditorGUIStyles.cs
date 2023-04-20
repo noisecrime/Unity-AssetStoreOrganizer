@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace NoiseCrimeStudios.Editor.IMGUI
+namespace NoiseCrimeStudios.Core.Editor.IMGUI
 {
     /// <summary>Collection of custom styles for Unity's Immediate Mode GUI layout.</summary>
     /// <remarks>

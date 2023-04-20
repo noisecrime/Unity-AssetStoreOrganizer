@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NoiseCrimeStudios.Editor.IMGUI
+namespace NoiseCrimeStudios.Core.Editor.IMGUI
 {
     /// <summary>Support for a clipped Unity IMGUI ScrollView.</summary>
     /// <remarks>
